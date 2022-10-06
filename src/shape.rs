@@ -1,5 +1,4 @@
-use std::ops::Add;
-use std::collections::HashSet;
+use std::{collections::HashSet, ops::Add};
 
 #[derive(Debug, Hash, PartialEq, Eq, Clone, Copy)]
 pub struct Pos(pub i32, pub i32);
@@ -27,20 +26,11 @@ macro_rules! impl_shape_constructor {
           anchor: $anchor,
         }
       }
-    )*    
+    )*
   };
 }
 
 impl Shape {
-  // pub fn new_i() -> Self {
-  //   Self {
-  //     positions: [Pos(0, 0), Pos(1, 0), Pos(2, 0), Pos(3, 0)]
-  //       .into_iter()
-  //       .collect(),
-  //     anchor: Pos(1, 0),
-  //   }
-  // }
-
   impl_shape_constructor! {
     new_i: [Pos(0, 0), Pos(1, 0), Pos(2, 0), Pos(3, 0)] anchored at Pos(1, 0);
     new_o: [Pos(0, 0), Pos(1, 0), Pos(0, 1), Pos(1, 1)] anchored at Pos(0, 0);
@@ -64,6 +54,14 @@ impl Shape {
       6 => Self::new_z(),
       _ => unreachable!(),
     }
+  }
+
+  pub fn positions(&self) -> impl Iterator<Item = Pos> + '_ {       // bound to the self lifetime
+    self.positions.iter().copied()
+  }
+
+  pub fn collides_with(&self, other: &Shape) -> bool {
+    self.positions.intersection(&other.positions).count() > 0
   }
 }
 
