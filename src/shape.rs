@@ -56,12 +56,41 @@ impl Shape {
     }
   }
 
-  pub fn positions(&self) -> impl Iterator<Item = Pos> + '_ {       // bound to the self lifetime
+  pub fn iter_positions(&self) -> impl Iterator<Item = Pos> + '_ {
+    // bound to the self lifetime
     self.positions.iter().copied()
   }
 
   pub fn collides_with(&self, other: &Shape) -> bool {
     self.positions.intersection(&other.positions).count() > 0
+  }
+
+  pub fn rotated(&self) -> Self {
+    let Pos(a, b) = self.anchor;
+
+    Self {
+      positions: self
+        .iter_positions()
+        .map(|Pos(x, y)| Pos(-y + b + a, x - a + b))
+        .collect(),
+      anchor: self.anchor,
+    }
+  }
+
+  pub fn remove_line(&mut self, y: i32) {
+    self.positions = self
+      .positions
+      .iter()
+      .copied()
+      .filter(|pos| pos.1 != y)
+      .map(|pos| {
+        if pos.1 >= y {
+          pos
+        } else {
+          Pos(pos.0, pos.1 + 1)
+        }
+      })
+      .collect();
   }
 }
 
