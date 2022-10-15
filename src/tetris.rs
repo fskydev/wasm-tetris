@@ -1,12 +1,15 @@
 use crate::shape::{Pos, Shape};
 use std::{collections::HashSet, mem};
+use wasm_bindgen::prelude::*;
 
+#[wasm_bindgen]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Direction {
   Left,
   Right,
 }
 
+#[wasm_bindgen]
 #[derive(Debug)]
 pub struct Tetris {
   width: i32,
@@ -17,16 +20,6 @@ pub struct Tetris {
 }
 
 impl Tetris {
-  pub fn new(width: u32, height: u32) -> Self {
-    Self {
-      width: width as i32,
-      height: height as i32,
-      current_shape: &Shape::new_random() + Pos((width as i32) / 2, 0), //todo!(),
-      fixed_shapes: vec![],
-      lost: false,
-    }
-  }
-
   pub fn is_out_of_bounds(&self, shape: &Shape) -> bool {
     !shape
       .iter_positions()
@@ -62,6 +55,19 @@ impl Tetris {
       if self.is_line_full(y) {
         self.remove_line(y);
       }
+    }
+  }
+}
+
+#[wasm_bindgen]
+impl Tetris {  
+  pub fn new(width: u32, height: u32) -> Self {
+    Self {
+      width: width as i32,
+      height: height as i32,
+      current_shape: &Shape::new_random() + Pos((width as i32) / 2, 0), //todo!(),
+      fixed_shapes: vec![],
+      lost: false,
     }
   }
 
@@ -120,20 +126,5 @@ impl Tetris {
     {
       self.current_shape = rotated_current_shape;
     }
-  }
-}
-
-#[cfg(test)]
-mod tests {
-  use super::Tetris;
-
-  #[test]
-  fn test() {
-    let mut tetris = Tetris::new(10, 30);
-    tetris.tick();
-    tetris.tick();
-    tetris.tick();
-
-    println!("{:#?}", tetris);
   }
 }
