@@ -1,4 +1,5 @@
 use std::{collections::HashSet, ops::Add};
+use wasm_bindgen::prelude::*;
 
 #[derive(Debug, Hash, PartialEq, Eq, Clone, Copy)]
 pub struct Pos(pub i32, pub i32);
