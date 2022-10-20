@@ -1,5 +1,5 @@
 # wasm-tetris
-Tetris game built with Rust and WebAssembly
+Tetris clone in Rust and WebAssembly
 
 ## Preview
 
