@@ -7,11 +7,11 @@ const WIDTH = 10;
 const HEIGHT = 20;
 const TICK_DELAY = 400;
 
-const tetris = Tetris.new(WIDTH, HEIGHT);
+let tetris = Tetris.new(WIDTH, HEIGHT);
 
 const canvas = document.getElementById("tetris-canvas");
-canvas.width = (CELL_SIZE + 1) * WIDTH + 1;
-canvas.height = (CELL_SIZE + 1) * HEIGHT + 1;
+canvas.width = (CELL_SIZE + 2) * WIDTH + 2;
+canvas.height = (CELL_SIZE + 2) * HEIGHT + 2;
 
 const ctx = canvas.getContext('2d');
 
@@ -28,10 +28,10 @@ const draw = () => {
   for (let row = 0; row < HEIGHT; row++) {
     for (let col = 0; col < WIDTH; col++) {
       const idx = getIndex(row, col);
-      ctx.fillStyle = cells[idx] ? "#000000": "#FFFFFF";
+      ctx.fillStyle = cells[idx] ? "#63b323": "#9b6928";
       ctx.fillRect(
-        col * (CELL_SIZE + 1) + 1,
-        row * (CELL_SIZE + 1) + 1,
+        col * (CELL_SIZE + 2) + 2,
+        row * (CELL_SIZE + 2) + 2,
         CELL_SIZE,
         CELL_SIZE
       )
@@ -39,6 +39,10 @@ const draw = () => {
   }
 
   ctx.stroke();
+}
+
+const restart = () => {
+  tetris = Tetris.new(WIDTH, HEIGHT);
 }
 
 let tick_delay = TICK_DELAY;
@@ -53,13 +57,9 @@ const renderLoop = (timestamp) => {
 
   if (progress > tick_delay) {
     last_tick = timestamp;
-    tetris.tick();
-    if(tick_delay < TICK_DELAY) {
-      setTimeout(() => {
-        tick_delay = TICK_DELAY;
-      }, 200);
-      
-    }
+    let status = tetris.tick();
+    
+    if(!status) restart()
   }
 
   draw();
@@ -82,6 +82,13 @@ document.addEventListener("keydown", e => {
       break;
     default:
       break;
+  }
+});
+
+
+document.addEventListener('keyup', (e) => {
+  if(e.code == "ArrowDown") {
+    tick_delay = TICK_DELAY;
   }
 });
 

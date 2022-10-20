@@ -85,9 +85,9 @@ impl Tetris {
     }
   }
 
-  pub fn tick(&mut self) {
+  pub fn tick(&mut self) -> bool {
     if self.lost {
-      return;
+      return false;
     }
 
     let translated_current_shape = &self.current_shape + Pos(0, 1);
@@ -109,6 +109,8 @@ impl Tetris {
     } else {
       self.current_shape = translated_current_shape;
     }
+
+    return true;
   }
 
   pub fn shift(&mut self, direction: Direction) {
@@ -134,6 +136,10 @@ impl Tetris {
       return;
     }
 
+    if self.current_shape.get_anchor() == Pos(-1, -1) {
+      return;
+    }
+    
     let rotated_current_shape = self.current_shape.rotated();
 
     if !self.is_out_of_bounds(&rotated_current_shape) && !self.is_colliding(&rotated_current_shape)
@@ -177,5 +183,6 @@ mod tests {
     tetris.tick();
 
     println!("{:#?}", tetris);
+    println!("{:#?}", tetris.current_shape.get_anchor());
   }
 }

@@ -1,22 +1,99 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Tetris</title>
-    <style>
-      body {
-        background-color: #000;
+
+<head>
+  <meta charset="utf-8">
+  <title>Tetris</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: #45522d;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      color: #96dd5d;
+    }
+
+    h1 {
+      color: #96dd5d;
+      text-align: center;
+      font-size: 36px;
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    .controls {
+      position: absolute;
+      top: 0;
+      left: calc(50% + 120px);
+    }
+
+    .controls p {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .controls p .emoji {
+      display: none;
+    }
+
+    .share {
+      padding: 20px;
+    }
+
+    .share a {
+      color: #96dd5d;
+      text-decoration: none;
+    }
+
+    .share a span {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 540px) {
+      .controls p {
+        font-size: 10px;
+        text-transform: capitalize;
       }
 
-      canvas {
-        margin: auto;
-        display: block;
+      .controls p .letter {
+        display: none;
       }
-    </style>
-  </head>
-  <body>
-    <noscript>This page contains webassembly and javascript content, please enable javascript in your browser.</noscript>
+
+      .controls p .emoji {
+        display: inline;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>wasm-tetris</h1>
+  <div class="container">
     <canvas id="tetris-canvas"></canvas>
-    <script src="./bootstrap.js"></script>
-  </body>
+    <div class="controls">
+      <p>Up arrow: <span class="letter">Rotate</span><span class="emoji">↻</span></p>
+      <p>Down arrow: <span class="letter">Soft drop</span><span class="emoji">⬇</span></p>
+      <p>Left arrow: <span class="letter">Shift left</span><span class="emoji">⬅</span></p>
+      <p>Right arrow: <span class="letter">Shift right</span><span class="emoji">➡</span></p>
+    </div>
+    <div class="share">
+      <a href="https://github.com/f-sky/wasm-tetris" target="_blank"><span>Give me a star</span> ⭐</a>
+    </div>
+  </div>
+  <script src="./bootstrap.js"></script>
+</body>
+
 </html>

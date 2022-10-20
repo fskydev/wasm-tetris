@@ -97,9 +97,11 @@ export class Tetris {
         return Tetris.__wrap(ret);
     }
     /**
+    * @returns {boolean}
     */
     tick() {
-        wasm.tetris_tick(this.ptr);
+        const ret = wasm.tetris_tick(this.ptr);
+        return ret !== 0;
     }
     /**
     * @param {number} direction

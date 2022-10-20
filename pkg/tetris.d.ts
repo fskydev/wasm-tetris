@@ -23,8 +23,9 @@ export class Tetris {
 */
   static new(width: number, height: number): Tetris;
 /**
+* @returns {boolean}
 */
-  tick(): void;
+  tick(): boolean;
 /**
 * @param {number} direction
 */

@@ -1,5 +1,4 @@
 use std::{collections::HashSet, ops::Add};
-use wasm_bindgen::prelude::*;
 
 #[derive(Debug, Hash, PartialEq, Eq, Clone, Copy)]
 pub struct Pos(pub i32, pub i32);
@@ -34,7 +33,7 @@ macro_rules! impl_shape_constructor {
 impl Shape {
   impl_shape_constructor! {
     new_i: [Pos(0, 0), Pos(1, 0), Pos(2, 0), Pos(3, 0)] anchored at Pos(1, 0);
-    new_o: [Pos(0, 0), Pos(1, 0), Pos(0, 1), Pos(1, 1)] anchored at Pos(0, 0);
+    new_o: [Pos(0, 0), Pos(1, 0), Pos(0, 1), Pos(1, 1)] anchored at Pos(-1, -1);
     new_t: [Pos(0, 0), Pos(1, 0), Pos(2, 0), Pos(1, 1)] anchored at Pos(1, 0);
     new_j: [Pos(0, 0), Pos(0, 1), Pos(0, 2), Pos(-1, 2)] anchored at Pos(0, 1);
     new_l: [Pos(0, 0), Pos(0, 1), Pos(0, 2), Pos(1, 2)] anchored at Pos(0, 1);
@@ -58,7 +57,6 @@ impl Shape {
   }
 
   pub fn iter_positions(&self) -> impl Iterator<Item = Pos> + '_ {
-    // bound to the self lifetime
     self.positions.iter().copied()
   }
 
@@ -93,6 +91,10 @@ impl Shape {
       })
       .collect();
   }
+
+  pub fn get_anchor(&self) -> Pos {
+    self.anchor
+  }
 }
 
 impl Add<Pos> for &Shape {
@@ -101,7 +103,7 @@ impl Add<Pos> for &Shape {
   fn add(self, rhs: Pos) -> Self::Output {
     Shape {
       positions: self.positions.iter().map(|&pos| pos + rhs).collect(),
-      anchor: self.anchor + rhs,
+      anchor: if self.anchor == Pos(-1, -1) { self.anchor } else { self.anchor + rhs },
     }
   }
 }
